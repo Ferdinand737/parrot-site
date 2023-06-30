@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from .models import *
 import requests
 import os
@@ -8,8 +8,14 @@ import os
 def user_page(request, user_id):
   siteuser = SiteUser.objects.get(id=user_id)
   try:
-    user = Users.objects.get(user_id=user_id)
-    return render(request, 'discordlogin/user.html', {'user': user,'siteuser':siteuser})
+    print('user_id', request.user.id)
+    print('end', type(request.path_info.split(r'/')[-2]))
+    if request.user.id == int(request.path_info.split(r'/')[-2]):
+        user = Users.objects.get(user_id=user_id)
+        return render(request, 'discordlogin/user.html', {'user': user,'siteuser':siteuser})
+    else:
+        return render(request, 'discordlogin/403.html', status=403)
+
   except Users.DoesNotExist:
     user = Users(
     user_id=siteuser.id,
