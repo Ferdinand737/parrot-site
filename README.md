@@ -1,0 +1,26 @@
+# TODO
+
+- [ ] Monetize Parrot
+  - [ ] Calculate profitable prices
+  - [ ] Get domain name 
+  - [ ] Create django site
+    - [ ] Port forwarding
+    - [ ] nginx
+    - [ ] https
+    - [x] Connect to existing database
+    - [ ] user page
+      - [x] django app for discord login
+      - [x] discord authentication
+      - [ ] show discord user profile picture
+      - [ ] show relevant user account information
+      - [ ] redirect to payments with "buy" button
+    - [ ] Stripe payments
+      - [ ] make stripe account
+      - [ ] django app for payments [toutorial](https://ordinarycoders.com/blog/article/django-and-stripe)
+        - [ ] nice looking checkout page
+        - [ ] various price tiers
+        - [ ] update "transactions" table in database
+        - [ ] update user character credit balance
+  - [ ] Update Parrot bot
+    - [ ] Reduce max monthly characters for existing users
+    - [ ] Link to parrot site
