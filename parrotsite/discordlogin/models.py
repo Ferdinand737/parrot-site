@@ -19,17 +19,16 @@ class SiteUser(models.Model):
         return True
 
 
-
 class Users(models.Model):
     user_id = models.BigIntegerField(primary_key=True)
     username = models.CharField(max_length=255)
-    privileges = models.CharField(max_length=255, blank=True, null=True)
-    total_chars_used = models.IntegerField(blank=True, null=True)
-    monthly_char_limit = models.IntegerField(blank=True, null=True)
-    monthly_chars_used = models.IntegerField(blank=True, null=True)
-    char_credit = models.IntegerField(blank=True, null=True)
-    last_char_reset = models.DateTimeField(blank=True, null=True)
-    date_time = models.DateTimeField(blank=True, null=True)
+    privileges = models.CharField(max_length=255, default='normal_user')
+    total_chars_used = models.IntegerField(default=0)
+    monthly_char_limit = models.IntegerField(default=4000)
+    monthly_chars_used = models.IntegerField(default=0)
+    char_credit = models.IntegerField(default=0)
+    last_char_reset = models.DateTimeField(default='1970-01-01 00:00:01')
+    date_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         managed = False

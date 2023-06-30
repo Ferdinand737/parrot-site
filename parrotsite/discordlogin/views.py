@@ -6,12 +6,17 @@ import requests
 import os
 
 def user_page(request, user_id):
+  siteuser = SiteUser.objects.get(id=user_id)
   try:
-    siteuser = SiteUser.objects.get(id=user_id)
     user = Users.objects.get(user_id=user_id)
     return render(request, 'discordlogin/user.html', {'user': user,'siteuser':siteuser})
   except Users.DoesNotExist:
-    return HttpResponse('User not found', status=404)
+    user = Users(
+    user_id=siteuser.id,
+    username=siteuser.discord_tag
+    )
+    user.save()
+    return render(request, 'discordlogin/user.html', {'user': user,'siteuser':siteuser})
    
    
 def index(request):
