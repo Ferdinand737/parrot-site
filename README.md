@@ -18,9 +18,9 @@
       - [ ] make stripe account
       - [ ] django app for payments [toutorial](https://ordinarycoders.com/blog/article/django-and-stripe)
         - [ ] nice looking checkout page
-        - [ ] various price tiers
-        - [ ] update "transactions" table in database
-        - [ ] update user character credit balance
+        - [ ] implement purchase functionality 
+          - [ ] update transactions table in database when purchase is made
+          - [ ] update user character credit balance in database when purchase is made
   - [ ] Update Parrot bot
     - [ ] Reduce max monthly characters for existing users
     - [ ] Link to parrot site
