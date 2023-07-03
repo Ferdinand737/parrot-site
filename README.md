@@ -2,7 +2,7 @@
 
 - [ ] Monetize Parrot
   - [ ] Calculate profitable prices
-  - [ ] Get domain name 
+  - [x] Get domain name -> www.parrotbot.me
   - [ ] Create django site
     - [ ] Port forwarding
     - [ ] nginx
@@ -13,10 +13,11 @@
       - [x] discord authentication
       - [ ] show discord user profile picture
       - [ ] show relevant user account information
-      - [ ] redirect to payments with "buy" button
+      - [x] redirect to payments with "buy" button
+      - [ ] looks nice
     - [ ] Stripe payments
-      - [ ] make stripe account
-      - [ ] django app for payments [toutorial](https://ordinarycoders.com/blog/article/django-and-stripe)
+      - [x] make stripe account
+      - [ ] django app for payments [toutorial](https://www.youtube.com/watch?v=722A27IoQnk)
         - [ ] nice looking checkout page
         - [ ] implement purchase functionality 
           - [ ] update transactions table in database when purchase is made

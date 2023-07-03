@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'discordlogin.apps.DiscordloginConfig'
+    'discordlogin.apps.DiscordloginConfig',
+    'payments'
 ]
 
 MIDDLEWARE = [
