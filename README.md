@@ -12,7 +12,7 @@
     - [ ] user page
       - [x] django app for discord login
       - [x] discord authentication
-      - [ ] show discord user profile picture
+      - [x] show discord user profile picture
       - [ ] show relevant user account information
       - [x] redirect to payments with "buy" button
       - [ ] looks nice
