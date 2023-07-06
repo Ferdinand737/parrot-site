@@ -8,7 +8,7 @@
     - [ ] nginx
     - [ ] https
     - [x] Connect to existing database
-    - [ ] Logout functionality
+    - [x] Logout functionality
     - [ ] user page
       - [x] django app for discord login
       - [x] discord authentication
