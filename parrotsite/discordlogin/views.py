@@ -9,9 +9,12 @@ import os
 @login_required(login_url="/?error=unauthorized") #will redirect to this url if user not logged in
 def user_page(request, user_id):
   siteuser = SiteUser.objects.get(id=user_id)
+  print(siteuser==request.user)
   try:
-    print('user_id', request.user.id)
-    print('end', type(request.path_info.split(r'/')[-2]))
+    # print('user_id', request.user.id)
+    # print('end', type(request.path_info.split(r'/')[-2]))
+    print("Avatar hash: " + request.user.avatar)
+    print("User id: " ,request.user.id)
     if request.user.id == int(request.path_info.split(r'/')[-2]):
         user = Users.objects.get(user_id=user_id)
         return render(request, 'discordlogin/user.html', {'user': user,'siteuser':siteuser})
