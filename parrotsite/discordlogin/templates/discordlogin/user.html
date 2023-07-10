@@ -22,67 +22,114 @@
     
         table {
             border-collapse: collapse;
-            width: 50%;
             margin: 0 auto; /* Center the table */
             border-radius: 10px; /* Round the corners */
             overflow: hidden; /* Hide overflowing content */
+        }
+        #payment-table {
+            background-color: #3b474e;
         }
     
         th, td {
             padding: 10px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
     
-        th, tr {
+        #user-information {
             background-color: #181818;
+            width: 500px;
+            border-radius: 4%;
+            padding: 40px;
+            margin: 50px;
+        }
+
+        #payment-information {
+            background-color: #181818;
+            width: 600px;
+            border-radius: 4%;
+            padding: 40px;
+            margin: 50px;
+        }
+        .buy-button {
+            display: block;
+            margin-top: 50px;
+            padding: 10px 20px;
+            background-color: #ffbb00;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 100px;
+            text-align: center;
+        }
+        #profile-pic{
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
         }
     </style>
 </head>
 <body class="m-5">
-    <div class="d-flex justify-content-between">
-        <h1>User Detail</h1>
-        <div class="d-flex">
-            <a class="btn btn-secondary" href="/logout">logout</a>
-
-        </div>
+    <div class="position-relative">
+        <a id="logout-button" class="btn btn-secondary position-absolute top-0 end-0" href="/logout">Logout</a>
     </div>
+    <center>
+        <div id="user-information">
+        
+            <div id="name-avatar" class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <img id="profile-pic" src="https://cdn.discordapp.com/avatars/{{siteuser.id}}/{{siteuser.avatar}}">
+                </div>
+                <div class="col-md-9 d-flex align-items-center">
+                    <h4>{{ siteuser.discord_tag }}</h4>
+                </div>
+            </div>
 
-    <img src="https://cdn.discordapp.com/avatars/{{siteuser.id}}/{{siteuser.avatar}}" alt="" class="img img-fluid mx-auto d-block mb-5">
-
-    <table>
-        <tr>
-            <th>Username:</th>
-            <td>{{ siteuser.discord_tag }}</td>
-        </tr>
-        <tr>
-            <th>Privileges:</th>
-            <td>{{ user.privileges }}</td>
-        </tr>
-        <tr>
-            <th>Total Chars Used:</th>
-            <td>{{ user.total_chars_used }}</td>
-        </tr>
-        <tr>
-            <th>Monthly Char Limit:</th>
-            <td>{{ user.monthly_char_limit }}</td>
-        </tr>
-        <tr>
-            <th>Monthly Chars Used:</th>
-            <td>{{ user.monthly_chars_used }}</td>
-        </tr>
-        <tr>
-            <th>Char Credit:</th>
-            <td>{{ user.char_credit }}</td>
-        </tr>
-        <tr>
-            <th>Last Char Reset:</th>
-            <td>{{ user.last_char_reset }}</td>
-        </tr>
-        <tr>
-            <th>Date Time:</th>
-            <td>{{ user.date_time }}</td>
-        </tr>
-    </table>
+            <table>       
+                <tr>
+                    <th>Total Characters Used:</th>
+                    <td>{{ user.total_chars_used }}</td>
+                </tr>
+                <tr>
+                    <th>Monthly Character Limit:</th>
+                    <td>{{ user.monthly_char_limit }}</td>
+                </tr>
+                <tr>
+                    <th>Monthly Characters Used:</th>
+                    <td>{{ user.monthly_chars_used }}</td>
+                </tr>
+                <tr>
+                    <th>Character Credit:</th>
+                    <td>{{ user.char_credit }}</td>
+                </tr>
+                <tr>
+                    <th>Last Character Reset:</th>
+                    <td>{{ user.last_char_reset|date:"M d, Y" }}</td>
+                </tr>
+                <tr>
+                    <th>Next Character Reset:</th>
+                    <td>{{ next_reset|date:"M d, Y" }}</td>
+                </tr> 
+            </table>
+        </div>
+        
+        <div id="payment-information">
+            <h2>Buy More Characters</h2>
+            <p>New Characters will be added to your account immediately</p>
+            <table id="payment-table">
+                <tbody>
+                    <tr>
+                        <th>10,000 characters</th>
+                        <td>$6.00 USD</td>
+                        <td><a class="buy-button" href="#">Buy</a></td>
+                    </tr>
+                    <tr>
+                        <th>Buy 20,000 characters</th>
+                        <td>$10.00 USD</td>
+                        <td><a class="buy-button" href="#">Buy</a></td>
+                    </tr>
+                </tbody>
+            </table>       
+        </div>
+    </center>
 </body>
 </html>

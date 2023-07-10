@@ -5,19 +5,28 @@ from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from .models import *
 import requests
 import os
+from datetime import datetime, timedelta
+
 
 @login_required(login_url="/?error=unauthorized") #will redirect to this url if user not logged in
 def user_page(request, user_id):
   siteuser = SiteUser.objects.get(id=user_id)
-  print(siteuser==request.user)
+
   try:
-    # print('user_id', request.user.id)
-    # print('end', type(request.path_info.split(r'/')[-2]))
-    print("Avatar hash: " + request.user.avatar)
-    print("User id: " ,request.user.id)
+
     if request.user.id == int(request.path_info.split(r'/')[-2]):
+        
         user = Users.objects.get(user_id=user_id)
-        return render(request, 'discordlogin/user.html', {'user': user,'siteuser':siteuser})
+
+        last_reset = user.last_char_reset
+        next_reset = last_reset + timedelta(days=30)
+        context = {
+          'user': user,
+          'siteuser':siteuser,
+          'next_reset': next_reset
+        }
+        
+        return render(request, 'discordlogin/user.html', context)
     else:
         return render(request, 'discordlogin/403.html', status=403)
 
@@ -27,6 +36,9 @@ def user_page(request, user_id):
     username=siteuser.discord_tag
     )
     user.save()
+
+
+
     return render(request, 'discordlogin/user.html', {'user': user,'siteuser':siteuser})
    
    
