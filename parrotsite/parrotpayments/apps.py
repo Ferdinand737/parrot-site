@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class DiscordloginConfig(AppConfig):
+class ParrotpaymentsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'discordlogin'
+    name = 'parrotpayments'

@@ -33,7 +33,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 AUTHENTICATION_BACKENDS = [
-    'discordlogin.auth.DiscordAuthenticationBackend'
+    'parrotpayments.auth.DiscordAuthenticationBackend'
 ]
 
 # Application definition
@@ -45,8 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'discordlogin.apps.DiscordloginConfig',
-    'payments'
+    'parrotpayments.apps.ParrotpaymentsConfig',
 ]
 
 MIDDLEWARE = [
