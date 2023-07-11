@@ -33,4 +33,15 @@ class Users(models.Model):
     class Meta:
         managed = False
         db_table = 'users'
+        
+class ReloadOptions(models.Model):
+    name = models.CharField(max_length=255, null=False)
+    num_characters = models.IntegerField(null=False)
+    price = models.IntegerField(default=0, null=False)
+    description = models.CharField(max_length=255, default="", null=False)
+    
+    def __str__(self):
+        return "Name: {self.name} | Characters: {self.characters} | Price: {self.get_display_price}"
 
+    def get_display_price(self):
+        return "{0:.2f}".format(self.price / 100)

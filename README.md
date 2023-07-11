@@ -19,8 +19,15 @@
     - [ ] Stripe payments
       - [x] make stripe account
       - [ ] django app for payments [toutorial](https://www.youtube.com/watch?v=722A27IoQnk)
-        - [ ] nice looking checkout page
+        - [x] Connect to Stripe API
         - [ ] implement purchase functionality 
+          - [x] Set up checkout session with stripe
+          - [x] Create product model
+          - [x] Process a test transaction
+          - [ ] Complete listening for webhook from Stripe. This confirms the payment was successful
+          - [ ] Make the success page
+          - [ ] Make the Payment cancelled page
+          - [ ] nice looking checkout page
           - [ ] update transactions table in database when purchase is made
           - [ ] update user character credit balance in database when purchase is made
   - [ ] Update Parrot bot

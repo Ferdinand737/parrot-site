@@ -117,16 +117,20 @@
             <p>New Characters will be added to your account immediately</p>
             <table id="payment-table">
                 <tbody>
+                    {% for option in reload_options %}
                     <tr>
-                        <th>10,000 characters</th>
-                        <td>$6.00 USD</td>
-                        <td><a class="buy-button" href="#">Buy</a></td>
+                        <th>{{ option.name }}</th>
+                        <td>{{ option.num_characters }}</td>
+                        <td>${{ option.get_display_price }}</td>
+                        <td>
+                            <form action="/payments/checkout/{{option.id}}" method="POST">
+                                {% csrf_token %}
+                                <button class="buy-button" type="submit" id="checkout-button">Buy</button>
+                            </form>
+                        </td>
                     </tr>
-                    <tr>
-                        <th>Buy 20,000 characters</th>
-                        <td>$10.00 USD</td>
-                        <td><a class="buy-button" href="#">Buy</a></td>
-                    </tr>
+                    {% endfor %}
+
                 </tbody>
             </table>       
         </div>

@@ -7,5 +7,8 @@ urlpatterns = [
     path("discord_login", views.discord_login, name="discord_login"),
     path("login/redirect", views.login_redirect, name="login_redirect"),
     path("user_page/<int:user_id>/",views.user_page,name="user_page"),
-    path("logout", views.logout_view, name="logout")
+    path("logout", views.logout_view, name="logout"),
+    path("payments/checkout/<int:product_id>", views.create_checkout_session_view, name="create_checkout_session_view"),
+    path("payments/success", views.payment_success, name="payment_success"),
+    path("payments/cancel", views.payment_cancel, name="payment_cancel"),
 ]
