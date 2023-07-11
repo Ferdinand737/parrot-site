@@ -26,9 +26,9 @@ def user_page(request, user_id):
           'next_reset': next_reset
         }
         
-        return render(request, 'discordlogin/user.html', context)
+        return render(request, 'user.html', context)
     else:
-        return render(request, 'discordlogin/403.html', status=403)
+        return render(request, '403.html', status=403)
 
   except Users.DoesNotExist:
     user = Users(
@@ -39,11 +39,11 @@ def user_page(request, user_id):
 
 
 
-    return render(request, 'discordlogin/user.html', {'user': user,'siteuser':siteuser})
+    return render(request, 'user.html', {'user': user,'siteuser':siteuser})
    
    
 def index(request):
-    return render(request, 'discordlogin/index.html')
+    return render(request, 'index.html')
 
 def discord_login(request):
     return redirect(os.getenv('DISCORD_OAUTH'))

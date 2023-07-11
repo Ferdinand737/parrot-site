@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="vh-100 d-flex justify-content-center align-items-center">
+    <div class="h-75 d-flex flex-column align-items-center justify-content-center gap-3">
+        <h1 class='text-light fw-bold'>Parrot</h1>
+        <img src={% static 'images/parrot_5_round.png' %}>
+        <a class="btn btn-lg btn-primary w-100 mt-3 border border-0" style="background-color: #7289da" href="{% url 'discord_login' %}">Login with Discord</a>
+        <a class="btn btn-lg btn-secondary w-100 border border-0" style="background-color: #43b581" href="https://discord.com/api/oauth2/authorize?client_id=1095890592753528872&permissions=3196928&scope=bot">Add Parrot to your server</a>
+    </div>
+</div>
+{% endblock %}
