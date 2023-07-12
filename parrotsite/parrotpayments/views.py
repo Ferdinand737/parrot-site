@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from .models import *
+from .helpers import fulfill_order
 from datetime import datetime, timedelta
 import requests
 import os
@@ -43,13 +45,14 @@ def user_page(request, user_id):
     )
     user.save()
 
-
-
     return render(request, 'user.html', {'user': user,'siteuser':siteuser})
    
    
 def index(request):
-    return render(request, 'index.html')
+  print(request.user)
+  if request.user.id:
+    return redirect("/user_page/%s" % request.user.id)
+  return render(request, 'index.html')
 
 def discord_login(request):
     return redirect(os.getenv('DISCORD_OAUTH'))
@@ -67,11 +70,9 @@ def logout_view(request):
     logout(request)
     print("User has been logged out")
     return redirect("/?status=logged_out")
-
    
 
 def exchange_code(code: str):
-
   data = {
     "client_id": os.getenv('CLIENT_ID'),
     "client_secret": os.getenv('CLIENT_SECRET'),
@@ -111,6 +112,10 @@ def create_checkout_session_view(request, product_id):
           'quantity': 1,
         },
     ],
+    metadata={
+      'product_id': product.id,
+      'user_id': request.user.id,
+      },
     mode='payment',
     success_url=REDIRECT_DOMAIN + '/payments/success',
     cancel_url=REDIRECT_DOMAIN + '/payments/cancel',
@@ -119,3 +124,34 @@ def create_checkout_session_view(request, product_id):
 
 def payment_success(request): return render(request, "paymentsuccess.html")
 def payment_cancel(request): return render(request, "paymentcancel.html")
+
+@csrf_exempt
+def stripe_webhook(request):
+  payload = request.body
+  sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+  event = None
+
+  try:
+    event = stripe.Webhook.construct_event(
+      payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+    )
+  except ValueError as e:
+    # Invalid payload
+    print("Invalid Payload")
+    return HttpResponse(status=400)
+  except stripe.error.SignatureVerificationError as e:
+    # Invalid signature
+    print("Invalid Signature")
+    return HttpResponse(status=400)
+
+  # Handle the checkout.session.completed event
+  if event['type'] == 'checkout.session.completed':
+    # Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
+    session = stripe.checkout.Session.retrieve(
+      event['data']['object']['id'],
+      expand=['line_items'],
+    )
+    
+    fulfill_order(session)
+  # Passed signature verification
+  return HttpResponse(status=200)

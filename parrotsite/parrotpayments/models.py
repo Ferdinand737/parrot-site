@@ -34,6 +34,11 @@ class Users(models.Model):
         managed = False
         db_table = 'users'
         
+    def add_characters(self, chars):
+        self.char_credit += chars
+        self.save()
+        return
+        
 class ReloadOptions(models.Model):
     name = models.CharField(max_length=255, null=False)
     num_characters = models.IntegerField(null=False)

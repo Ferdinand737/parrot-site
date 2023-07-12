@@ -24,12 +24,16 @@
           - [x] Set up checkout session with stripe
           - [x] Create product model
           - [x] Process a test transaction
-          - [ ] Complete listening for webhook from Stripe. This confirms the payment was successful
-          - [ ] Make the success page
-          - [ ] Make the Payment cancelled page
-          - [ ] nice looking checkout page
+          - [x] Complete listening for webhook from Stripe. This confirms the payment was successful
+          - [x] nice looking checkout page
           - [ ] update transactions table in database when purchase is made
-          - [ ] update user character credit balance in database when purchase is made
+          - [x] update user character credit balance in database when purchase is made
+    - [ ] Front End
+      - [ ] Add a navbar
+      - [ ] Add a transaction history view
+      - [ ] Success Page - Redirect to home with success banner alert
+      - [ ] Cancelled Page - Redirect to home with purchase cancelled banner alert
+      - [ ] Convert styling to bootstrap for home page
   - [ ] Update Parrot bot
     - [ ] Reduce max monthly characters for existing users
     - [ ] Link to parrot site
