@@ -66,93 +66,108 @@
         }
     </style>
 </head>
-<body class="m-5">
-    <div class="position-relative">
-        <a id="logout-button" class="btn btn-secondary position-absolute top-0 end-0" href="/logout">Logout</a>
-    </div>
-        <div id="user" class="row">
-            <div id="user-information" class="col-md-6">
-                <div id="name-avatar" class="row">
-                    <div class="col-md-3 d-flex align-items-center">
-                        <img id="profile-pic" src="https://cdn.discordapp.com/avatars/{{siteuser.id}}/{{siteuser.avatar}}">
-                    </div>
-                    <div class="col-md-9 d-flex align-items-center">
-                        <h4>{{ siteuser.discord_tag }}</h4>
-                    </div>
-                </div>
-    
-                <table>       
-                    <tr>
-                        <th>Total Characters Used:</th>
-                        <td>{{ user.total_chars_used }}</td>
-                    </tr>
-                    <tr>
-                        <th>Monthly Character Limit:</th>
-                        <td>{{ user.monthly_char_limit }}</td>
-                    </tr>
-                    <tr>
-                        <th>Monthly Characters Used:</th>
-                        <td>{{ user.monthly_chars_used }}</td>
-                    </tr>
-                    <tr>
-                        <th>Character Credit:</th>
-                        <td>{{ user.char_credit }}</td>
-                    </tr>
-                    <tr>
-                        <th>Last Character Reset:</th>
-                        <td>{{ user.last_char_reset|date:"M d, Y" }}</td>
-                    </tr>
-                    <tr>
-                        <th>Next Character Reset:</th>
-                        <td>{{ next_reset|date:"M d, Y" }}</td>
-                    </tr> 
-                </table>
-            </div>
-    
-            <div id="transaction-history" class="col-md-6">
-                
-                <h4>Transaction History</h4>
-                
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Date</th>
-                            <th>Product</th>
-                            <th>Amount Paid</th>
-                        </tr>
-                        {% for transaction in transactions %}
-                            <tr>
-                                <td>{{ transaction.date_time|date:"M d, Y" }}</td>
-                                <td>{{ transaction.product.name }}</td>
-                                <td>${{ transaction.get_display_amount }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>   
-                </table>
-            </div>
-        </div>
-                    
-        <div id="payment-information">
-            <h2>Buy More Characters</h2>
-            <p>New Characters will be added to your account immediately</p>
-            <table id="payment-table">
-                <tbody>
-                    {% for product in products %}
-                    <tr>
-                        <th>{{ product.name }}</th>
-                        <td>{{ product.num_characters }}</td>
-                        <td>${{ product.get_display_price }}</td>
-                        <td>
-                            <form action="/payments/checkout/{{product.id}}" method="POST">
-                                {% csrf_token %}
-                                <button class="buy-button" type="submit" id="checkout-button">Buy</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
 
-                </tbody>
-            </table>       
+  
+<body class="m-5">
+    <div class="d-flex justify-content-end">
+        <a id="logout-button" class="btn btn-secondary" href="/logout">Logout</a>
+    </div>
+    {% if purchase_status == "success" %}
+    <div class="mt-3 alert alert-success alert-dismissible fade show text-center" role="alert">
+        You have successfully purchased characters for your account
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% elif purchase_status == "cancelled" %}
+    <div class="mt-3 alert alert-danger alert-dismissible fade show text-center" role="alert">
+        You have cancelled your transaction
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+      
+      
+    <div id="user" class="row">
+        <div id="user-information" class="col-md-6">
+            <div id="name-avatar" class="row">
+                <div class="col-md-3 d-flex align-items-center">
+                    <img id="profile-pic" src="https://cdn.discordapp.com/avatars/{{siteuser.id}}/{{siteuser.avatar}}">
+                </div>
+                <div class="col-md-9 d-flex align-items-center">
+                    <h4>{{ siteuser.discord_tag }}</h4>
+                </div>
+            </div>
+
+            <table>       
+                <tr>
+                    <th>Total Characters Used:</th>
+                    <td>{{ user.total_chars_used }}</td>
+                </tr>
+                <tr>
+                    <th>Monthly Character Limit:</th>
+                    <td>{{ user.monthly_char_limit }}</td>
+                </tr>
+                <tr>
+                    <th>Monthly Characters Used:</th>
+                    <td>{{ user.monthly_chars_used }}</td>
+                </tr>
+                <tr>
+                    <th>Character Credit:</th>
+                    <td>{{ user.char_credit }}</td>
+                </tr>
+                <tr>
+                    <th>Last Character Reset:</th>
+                    <td>{{ user.last_char_reset|date:"M d, Y" }}</td>
+                </tr>
+                <tr>
+                    <th>Next Character Reset:</th>
+                    <td>{{ next_reset|date:"M d, Y" }}</td>
+                </tr> 
+            </table>
         </div>
+
+        <div id="transaction-history" class="col-md-6">
+            
+            <h4>Transaction History</h4>
+            
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Date</th>
+                        <th>Product</th>
+                        <th>Amount Paid</th>
+                    </tr>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.date_time|date:"M d, Y" }}</td>
+                            <td>{{ transaction.product.name }}</td>
+                            <td>${{ transaction.get_display_amount }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>   
+            </table>
+        </div>
+    </div>
+                
+    <div id="payment-information">
+        <h2>Buy More Characters</h2>
+        <p>New Characters will be added to your account immediately</p>
+        <table id="payment-table">
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <th>{{ product.name }}</th>
+                    <td>{{ product.num_characters }}</td>
+                    <td>${{ product.get_display_price }}</td>
+                    <td>
+                        <form action="/payments/checkout/{{product.id}}" method="POST">
+                            {% csrf_token %}
+                            <button class="buy-button" type="submit" id="checkout-button">Buy</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>       
+    </div>
 </body>
 </html>
