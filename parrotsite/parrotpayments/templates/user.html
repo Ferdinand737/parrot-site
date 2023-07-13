@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         body {
-            background-color: #333;
+            background-color: #181818;
             color: #fff;
             font-family: Arial, sans-serif;
         }
@@ -35,8 +35,7 @@
             text-align: left;
         }
     
-        #user-information {
-            background-color: #181818;
+        #user-information, #transaction-history {
             width: 500px;
             border-radius: 4%;
             padding: 40px;
@@ -44,7 +43,6 @@
         }
 
         #payment-information {
-            background-color: #181818;
             width: 600px;
             border-radius: 4%;
             padding: 40px;
@@ -72,58 +70,80 @@
     <div class="position-relative">
         <a id="logout-button" class="btn btn-secondary position-absolute top-0 end-0" href="/logout">Logout</a>
     </div>
-    <center>
-        <div id="user-information">
-        
-            <div id="name-avatar" class="row">
-                <div class="col-md-3 d-flex align-items-center">
-                    <img id="profile-pic" src="https://cdn.discordapp.com/avatars/{{siteuser.id}}/{{siteuser.avatar}}">
+        <div id="user" class="row">
+            <div id="user-information" class="col-md-6">
+                <div id="name-avatar" class="row">
+                    <div class="col-md-3 d-flex align-items-center">
+                        <img id="profile-pic" src="https://cdn.discordapp.com/avatars/{{siteuser.id}}/{{siteuser.avatar}}">
+                    </div>
+                    <div class="col-md-9 d-flex align-items-center">
+                        <h4>{{ siteuser.discord_tag }}</h4>
+                    </div>
                 </div>
-                <div class="col-md-9 d-flex align-items-center">
-                    <h4>{{ siteuser.discord_tag }}</h4>
-                </div>
+    
+                <table>       
+                    <tr>
+                        <th>Total Characters Used:</th>
+                        <td>{{ user.total_chars_used }}</td>
+                    </tr>
+                    <tr>
+                        <th>Monthly Character Limit:</th>
+                        <td>{{ user.monthly_char_limit }}</td>
+                    </tr>
+                    <tr>
+                        <th>Monthly Characters Used:</th>
+                        <td>{{ user.monthly_chars_used }}</td>
+                    </tr>
+                    <tr>
+                        <th>Character Credit:</th>
+                        <td>{{ user.char_credit }}</td>
+                    </tr>
+                    <tr>
+                        <th>Last Character Reset:</th>
+                        <td>{{ user.last_char_reset|date:"M d, Y" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Next Character Reset:</th>
+                        <td>{{ next_reset|date:"M d, Y" }}</td>
+                    </tr> 
+                </table>
             </div>
-
-            <table>       
-                <tr>
-                    <th>Total Characters Used:</th>
-                    <td>{{ user.total_chars_used }}</td>
-                </tr>
-                <tr>
-                    <th>Monthly Character Limit:</th>
-                    <td>{{ user.monthly_char_limit }}</td>
-                </tr>
-                <tr>
-                    <th>Monthly Characters Used:</th>
-                    <td>{{ user.monthly_chars_used }}</td>
-                </tr>
-                <tr>
-                    <th>Character Credit:</th>
-                    <td>{{ user.char_credit }}</td>
-                </tr>
-                <tr>
-                    <th>Last Character Reset:</th>
-                    <td>{{ user.last_char_reset|date:"M d, Y" }}</td>
-                </tr>
-                <tr>
-                    <th>Next Character Reset:</th>
-                    <td>{{ next_reset|date:"M d, Y" }}</td>
-                </tr> 
-            </table>
+    
+            <div id="transaction-history" class="col-md-6">
+                
+                <h4>Transaction History</h4>
+                
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Date</th>
+                            <th>Product</th>
+                            <th>Amount Paid</th>
+                        </tr>
+                        {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction.date_time|date:"M d, Y" }}</td>
+                                <td>{{ transaction.product.name }}</td>
+                                <td>${{ transaction.get_display_amount }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>   
+                </table>
+            </div>
         </div>
-        
+                    
         <div id="payment-information">
             <h2>Buy More Characters</h2>
             <p>New Characters will be added to your account immediately</p>
             <table id="payment-table">
                 <tbody>
-                    {% for option in reload_options %}
+                    {% for product in products %}
                     <tr>
-                        <th>{{ option.name }}</th>
-                        <td>{{ option.num_characters }}</td>
-                        <td>${{ option.get_display_price }}</td>
+                        <th>{{ product.name }}</th>
+                        <td>{{ product.num_characters }}</td>
+                        <td>${{ product.get_display_price }}</td>
                         <td>
-                            <form action="/payments/checkout/{{option.id}}" method="POST">
+                            <form action="/payments/checkout/{{product.id}}" method="POST">
                                 {% csrf_token %}
                                 <button class="buy-button" type="submit" id="checkout-button">Buy</button>
                             </form>
@@ -134,6 +154,5 @@
                 </tbody>
             </table>       
         </div>
-    </center>
 </body>
 </html>

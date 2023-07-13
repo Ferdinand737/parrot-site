@@ -6,20 +6,18 @@ def fulfill_order(session):
     product_id = session['metadata']['product_id']
     
     user = Users.objects.get(user_id=user_id)
-    product = ReloadOptions.objects.get(id=product_id)
-    reload_credits(user, product)
-    update_transactions_table(session)
-    send_email(email, product, user)
-    return
+    product = Products.objects.get(id=product_id)
 
-def reload_credits(user, product):
     user.add_characters(product.num_characters)
-    return
 
-def update_transactions_table(session):
-    #TODO
-    return
+    transaction = Transactions(
+        user_id=user_id,  
+        product_id=product_id, 
+        amount_paid=session['amount_total'],  
+    )
+    transaction.save()
 
-def send_email(email, product, user):
+    email = session['customer_details']['email']
+
     #TODO
     return
