@@ -13,10 +13,7 @@
                 </div>
             </div>
         </div>
-        <div class="m-2">
-            <p>Usage Summary</p>
-        </div>
-        <div id="usage-data" class="m-2">
+        <div id="usage-data" class="m-2 mt-4">
             <table id="usage-table" class="table table-hover table-borderless">       
                 <tr>
                     <td class="text-light">Total Characters Used</td>
@@ -48,7 +45,7 @@
     
     <div id="transaction-history" class="col-md-6 m-5 d-flex flex-column align-items-center">
         <h4 class="text-light mt-4">Transaction History</h4>
-        <div id="table-wrap">
+        <div id="table-wrap" class="w-100">
             <table id="usage-table" class="table table-hover table-borderless">
                 <tbody>
                     <tr>
@@ -62,13 +59,11 @@
                             <td class="text-light">{{ transaction.product.name }}</td>
                             <td class="text-light">${{ transaction.get_display_amount }}</td>
                         </tr>
-                    {% endfor %}                   
-                </tbody>   
-                
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>
-
 </div>
 <div id="shop" class="m-5 row justify-content-center">
     {% for product in products %}
