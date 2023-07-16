@@ -55,6 +55,9 @@ class Products(models.Model):
     def get_display_price(self):
         return "{0:.2f}".format(self.price / 100)
     
+    def get_display_number(self):
+        return f"{self.num_characters:,}"
+    
 class Transactions(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.BigIntegerField()

@@ -5,7 +5,7 @@
 <div id="container" class="m-5 row justify-content-center">
     
     <div id="user-info" class="text-light col-md-6 m-5">
-        <div id="name-avatar" class="row m-2">
+        <div id="name-avatar" class="row m-2 mt-3">
             <div class="col-sm-2 d-flex align-items-center">
                 <img id="profile-pic" src="https://cdn.discordapp.com/avatars/{{siteuser.id}}/{{siteuser.avatar}}">
                 <div class="m-2">
@@ -67,18 +67,15 @@
 </div>
 <div id="shop" class="m-5 row justify-content-center">
     {% for product in products %}
-        <div id="product" class="m-3">
-            <h4>{{ product.name }}</h4>
-            <p>
-                {{ product.num_characters }} characters
-            </p>
-            <p>
-                ${{ product.get_display_price }}USD
-            </p>
+        <div id="product" class="m-3 text-light d-flex flex-column align-items-center">
+            <h4 class="mt-2">{{ product.name }}</h4>
+            <p>+{{ product.get_display_number }} character credit</p>
+            <p>${{ product.get_display_price }} USD</p>
             <form action="/payments/checkout/{{product.id}}" method="POST">
                 {% csrf_token %}
                 <button class="btn btn-lg btn-secondary w-100 border border-0" style="background-color: #d1b200" type="submit" id="checkout-button">Buy</button>
             </form>
+            <p>Character credit is only used when monthly characters run out.</p>
 
         </div>
     {% endfor %}
