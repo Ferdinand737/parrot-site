@@ -29,11 +29,11 @@
           - [ ] update transactions table in database when purchase is made
           - [x] update user character credit balance in database when purchase is made
     - [ ] Front End
-      - [ ] Add a navbar
-      - [ ] Add a transaction history view
+      - [x] Add a navbar
+      - [x] Add a transaction history view
       - [ ] Success Page - Redirect to home with success banner alert
       - [ ] Cancelled Page - Redirect to home with purchase cancelled banner alert
-      - [ ] Convert styling to bootstrap for home page
+      - [x] Convert styling to bootstrap for home page
   - [ ] Update Parrot bot
-    - [ ] Reduce max monthly characters for existing users
+    - [x] Reduce max monthly characters for existing users
     - [ ] Link to parrot site
