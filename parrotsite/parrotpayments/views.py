@@ -14,8 +14,8 @@ import stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required(login_url="/?error=unauthorized") #will redirect to this url if user not logged in
-def user_page(request, user_id):
-  siteuser = SiteUser.objects.get(id=user_id)
+def user_page(request, user_id, purchase_status=None):
+  siteuser = SiteUsers.objects.get(id=user_id)
   try:
 
     if request.user.id == int(request.path_info.split(r'/')[-2]):
@@ -26,12 +26,15 @@ def user_page(request, user_id):
         next_reset = last_reset + timedelta(days=30)
         
         # Get the data for reload options
-        reload_options = ReloadOptions.objects.all()
+        products = Products.objects.all()
+        transactions = Transactions.objects.filter(user_id=user_id)        
         context = {
           'user': user,
           'siteuser':siteuser,
           'next_reset': next_reset,
-          'reload_options': reload_options,
+          'products': products,
+          'transactions': transactions,
+          'purchase_status': purchase_status,
         }
         
         return render(request, 'user.html', context)
@@ -46,8 +49,7 @@ def user_page(request, user_id):
     user.save()
 
     return render(request, 'user.html', {'user': user,'siteuser':siteuser})
-   
-   
+
 def index(request):
   print(request.user)
   if request.user.id:
@@ -68,10 +70,8 @@ def login_redirect(request):
 def logout_view(request):
     user = request.user
     logout(request)
-    print("User has been logged out")
     return redirect("/?status=logged_out")
    
-
 def exchange_code(code: str):
   data = {
     "client_id": os.getenv('CLIENT_ID'),
@@ -85,7 +85,6 @@ def exchange_code(code: str):
     'Content-Type': 'application/x-www-form-urlencoded'
   }
   response = requests.post("https://discord.com/api/oauth2/token", data=data, headers=headers)
-  print(response)
   credentials = response.json()
   access_token = credentials['access_token']
   response = requests.get("https://discord.com/api/v6/users/@me", headers={
@@ -95,8 +94,8 @@ def exchange_code(code: str):
   return user
 
 def create_checkout_session_view(request, product_id):
-  REDIRECT_DOMAIN = "http://127.0.0.1:8000"
-  product = ReloadOptions.objects.get(id=product_id)
+  REDIRECT_DOMAIN = f"http://localhost:8000/user_page/{request.user.id}"
+  product = Products.objects.get(id=product_id)
   checkout_session = stripe.checkout.Session.create(
     payment_method_types=['card'],
     line_items=[
@@ -117,13 +116,10 @@ def create_checkout_session_view(request, product_id):
       'user_id': request.user.id,
       },
     mode='payment',
-    success_url=REDIRECT_DOMAIN + '/payments/success',
-    cancel_url=REDIRECT_DOMAIN + '/payments/cancel',
+    success_url=f"{REDIRECT_DOMAIN}/success",
+    cancel_url=f"{REDIRECT_DOMAIN}/cancelled",
   )
   return redirect(checkout_session.url, code=303)
-
-def payment_success(request): return render(request, "paymentsuccess.html")
-def payment_cancel(request): return render(request, "paymentcancel.html")
 
 @csrf_exempt
 def stripe_webhook(request):
@@ -137,11 +133,9 @@ def stripe_webhook(request):
     )
   except ValueError as e:
     # Invalid payload
-    print("Invalid Payload")
     return HttpResponse(status=400)
   except stripe.error.SignatureVerificationError as e:
     # Invalid signature
-    print("Invalid Signature")
     return HttpResponse(status=400)
 
   # Handle the checkout.session.completed event
