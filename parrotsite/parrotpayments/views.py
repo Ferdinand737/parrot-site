@@ -8,7 +8,6 @@ from .models import *
 from .helpers import fulfill_order
 from datetime import datetime, timedelta
 import requests
-import os
 import stripe
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -57,7 +56,7 @@ def index(request):
   return render(request, 'index.html')
 
 def discord_login(request):
-    return redirect(os.getenv('DISCORD_OAUTH'))
+    return redirect(settings.DISCORD_OAUTH)
 
 def login_redirect(request):
     code = request.GET.get('code')
@@ -74,11 +73,11 @@ def logout_view(request):
    
 def exchange_code(code: str):
   data = {
-    "client_id": os.getenv('CLIENT_ID'),
-    "client_secret": os.getenv('CLIENT_SECRET'),
+    "client_id": settings.DISCORD_CLIENT_ID,
+    "client_secret": settings.DISCORD_CLIENT_SECRET,
     "grant_type": "authorization_code",
     "code": code,
-    "redirect_uri": os.getenv('DISCORD_REDIRECT_URI'),
+    "redirect_uri": settings.DISCORD_REDIRECT_URI,
     "scope": "identify"
   }
   headers = {
@@ -86,6 +85,7 @@ def exchange_code(code: str):
   }
   response = requests.post("https://discord.com/api/oauth2/token", data=data, headers=headers)
   credentials = response.json()
+  print(response.content)
   access_token = credentials['access_token']
   response = requests.get("https://discord.com/api/v6/users/@me", headers={
     'Authorization': 'Bearer %s' % access_token
@@ -94,7 +94,7 @@ def exchange_code(code: str):
   return user
 
 def create_checkout_session_view(request, product_id):
-  REDIRECT_DOMAIN = f"http://localhost:8000/user_page/{request.user.id}"
+  REDIRECT_DOMAIN = settings.STRIPE_REDIRECT_DOMAIN + request.user.id
   product = Products.objects.get(id=product_id)
   checkout_session = stripe.checkout.Session.create(
     payment_method_types=['card'],

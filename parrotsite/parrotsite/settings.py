@@ -130,6 +130,12 @@ STATIC_URL = '/static/'
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
+STRIPE_REDIRECT_DOMAIN = os.getenv('STRIPE_REDIRECT_DOMAIN')
+
+DISCORD_CLIENT_SECRET = os.getenv('DISCORD_CLIENT_SECRET')
+DISCORD_CLIENT_ID = os.getenv('DISCORD_CLIENT_ID')
+DISCORD_REDIRECT_URI = os.getenv('DISCORD_REDIRECT_URI')
+DISCORD_OAUTH = os.getenv('DISCORD_OAUTH')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
